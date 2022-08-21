@@ -7,44 +7,33 @@ import bodyParser from 'body-parser';
 
 import { V0MODELS } from './controllers/v0/model.index';
 
-// (async () => {
+(async () => {
+  await sequelize.addModels(V0MODELS);
+  await sequelize.sync();
 
-      sequelize.authenticate().then(async () => {
-        console.log('Connection has been established successfully.');
-        console.log('Initializing Sequelize...');
-        sequelize.addModels(V0MODELS);
-        await sequelize.sync();
-        console.log('Sequelize initialized successfully.');
+  const app = express();
+  const port = process.env.PORT || 8080; // default port to listen
+  
+  app.use(bodyParser.json());
 
+  //CORS Should be restricted
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:8100");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+  });
 
-        const app = express();
-        const port = process.env.PORT || 8080; // default port to listen
-        
-        app.use(bodyParser.json());
-      
-        //CORS Should be restricted
-        app.use(function(req, res, next) {
-          res.header("Access-Control-Allow-Origin", "http://localhost:8100");
-          res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-          next();
-        });
-      
-        app.use('/api/v0/', IndexRouter)
-      
-        // Root URI call
-        app.get( "/", async ( req, res ) => {
-          res.send( "/api/v0/" );
-        } );
-        
-      
-        // Start the Server
-        app.listen( port, () => {
-            console.log( `server running http://localhost:${ port }` );
-            console.log( `press CTRL+C to stop server` );
-        } );
-      }).catch(err => {
-        console.error('Unable to connect to the database:', err);
-      })
+  app.use('/api/v0/', IndexRouter)
 
+  // Root URI call
+  app.get( "/", async ( req, res ) => {
+    res.send( "/api/v0/" );
+  } );
+  
 
-// })();
+  // Start the Server
+  app.listen( port, () => {
+      console.log( `server running http://localhost:${ port }` );
+      console.log( `press CTRL+C to stop server` );
+  } );
+})();
