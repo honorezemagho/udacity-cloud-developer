@@ -1,22 +1,19 @@
+require('dotenv').config();
+
 export const config = {
-  "dev": {
-    "username": "postgres",
-    "password": "postgres123",
-    "database": "udagram",
-    "host": "udagram.c4xxaojym2fj.us-east-1.rds.amazonaws.com",
-    "dialect": "postgres",
-    "aws_region": "us-east-1",
-    "aws_profile": "default",
-    "aws_media_bucket": "udagram-237"
+  "postgres": {
+    "username": process.env.POSTGRES_USERNAME,
+    "password": process.env.POSTGRES_PASSWORD,
+    "database": process.env.POSTGRES_DATABASE,
+    "host": process.env.POSTGRES_HOST,
+    "dialect": "postgres"
+  },
+  "aws": {
+    "aws_region": process.env.AWS_REGION,
+    "aws_profile": process.env.AWS_PROFILE,
+    "aws_media_bucket": process.env.AWS_MEDIA_BUCKET
   },
   "jwt": {
     "secret": " "
-  },
-  "prod": {
-    "username": "",
-    "password": "",
-    "database": "udagram_prod",
-    "host": "",
-    "dialect": "postgres"
   }
 }
